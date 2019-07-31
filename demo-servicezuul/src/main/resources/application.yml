@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: service-zuul
+
+server:
+  port: 8766
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+zuul:
+  host:
+      socket-timeout-millis: 60000
+      connect-timeout-millis: 60000
+  #ignoredServices: '*'
+  routes:
+      #这里一定要是你Eureka注册中心的服务的名称，是所以这里配置serviceId因为跟eureka结合了，如果单独使用zuul,那么就必须写自己机器的IP了，
+      #如url:http://localhost:8080/  这样的不好就是写死IP了，万一这IP挂了，这高可用性，服务注册那套东西就用不起来了
+      service-hello: /hi/**
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000 #缺省为1000
